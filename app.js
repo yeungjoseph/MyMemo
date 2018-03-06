@@ -4,6 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('client-sessions');
+
+const db = require('./models/index');
+const Users = db['User'];
 
 var index = require('./routes/index');
 var users = require('./routes/auth');
@@ -21,6 +25,42 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Session handling
+app.use(session({
+  cookieName: 'session', // Names the request object req.session
+  secret: 'xqKBPWdJvjbC9zRi3m6T',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}));
+
+app.use(function(req, res, next) {
+  if (req.session && req.session.user) {
+    const select = 'SELECT * FROM "Users" WHERE email = ?';
+
+    return db.sequelize
+      .query(select, { 
+        replacements: [req.session.user.email], 
+        model: Users,
+      })
+      .then((response) => {
+        if (response[0] !== undefined)
+        {
+          req.session.user = response[0];
+          req.user = response[0];
+          delete req.user.password;
+          res.locals.user = response[0];
+        }
+        next();
+      })
+      .catch((error) => {
+          console.log(error);
+          next();
+      });
+
+  }
+  next();
+});
 
 app.use('/', users);
 app.use('/', index);
