@@ -11,6 +11,7 @@ const Users = db['User'];
 
 var index = require('./routes/index');
 var users = require('./routes/auth');
+var tasks = require('./routes/tasks');
 
 var app = express();
 
@@ -62,6 +63,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use('/tasks', tasks);
 app.use('/', users);
 app.use('/', index);
 
