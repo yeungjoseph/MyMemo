@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const userController = require('../controllers').users;
 
 // Login routes
 router.get('/auth', function(req, res, next) {
@@ -7,11 +8,10 @@ router.get('/auth', function(req, res, next) {
 });
 
 router.post('/login', function(req, res) {
-  res.send('Login post')
+  console.log(req.body);
+  res.send('Login post');
 });
 
-router.post('/user', function(req, res) {
-  res.send('Create a new user');
-});
+router.post('/user', userController.create);
 
 module.exports = router;
