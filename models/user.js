@@ -4,6 +4,7 @@ var bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
+    // Should I explicitly define an ID here or does the db take care of it?
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     password: { type: DataTypes.STRING, allowNull: false }
   }, {});

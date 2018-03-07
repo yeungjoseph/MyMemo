@@ -37,11 +37,11 @@ app.use(session({
 
 app.use(function(req, res, next) {
   if (req.session && req.session.user) {
-    const select = 'SELECT * FROM "Users" WHERE email = ?';
+    const select = 'SELECT * FROM "Users" WHERE id = ?';
 
     return db.sequelize
       .query(select, { 
-        replacements: [req.session.user.email], 
+        replacements: [req.session.user.id], 
         model: Users,
       })
       .then((response) => {
@@ -58,7 +58,6 @@ app.use(function(req, res, next) {
           console.log(error);
           next();
       });
-
   }
   next();
 });

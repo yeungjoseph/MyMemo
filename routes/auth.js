@@ -1,14 +1,12 @@
 var express = require('express');
-var router = express.Router();
-const userController = require('../controllers').users;
+const db = require('../models/index');
 
-// Login routes
+var router = express.Router();
+const Users = db['User'];
+
+// Login and registration page
 router.get('/auth', function(req, res) {
   res.render('auth');
-});
-
-router.post('/login', userController.verify, function(req, res) {
-  res.send('Login post');
 });
 
 router.get('/logout', function(req, res) {
@@ -16,8 +14,74 @@ router.get('/logout', function(req, res) {
   res.redirect('/auth');
 });
 
-router.post('/user', userController.create, function(req, res) {
-  res.redirect('/tasks');
+// Login route
+router.post('/login',  function(req, res) {
+  const email = req.body.email.trim();
+  const password = req.body.password.trim();
+
+  if (email === '' || password === '')
+      return res.status(400).send('Invalid email or password');
+
+  const select = 'SELECT * FROM "Users" WHERE email = ?';
+  return db.sequelize
+    .query(select, { 
+        replacements: [email], 
+        model: Users,
+    })
+    .then((response) => {
+        if (response[0] !== undefined && response[0].checkPassword(password))
+        {
+            req.session.user = response[0];
+            return res.send('Login post'); 
+        }
+        else
+          return res.status(400).send('Invalid email or password');
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).send(error);
+    });
+});
+
+// Registration route
+router.post('/user',function(req, res) {
+  const saltRounds = 10;
+  const email = req.body.email.trim();
+  let password = req.body.password.trim();
+
+  if (email === '' || password === '')
+      return res.status(400).send('Invalid email or password');
+
+  password = Users.hashPassword(password, saltRounds);
+  const insert = 'INSERT INTO "Users" (email, password) VALUES (?, ?) RETURNING id';
+  
+  return db.sequelize
+    .query(insert, { 
+        replacements: [email, password], 
+        type: db.sequelize.QueryTypes.INSERT,
+    })
+    .spread((results, metadata) => {
+        const new_id = results[0].id;
+        const select = 'SELECT * FROM "Users" WHERE id = ?'
+        
+        return db.sequelize
+          .query(select, {
+            replacements: [new_id],
+            model: Users,
+          })
+          .then((response) => {
+            req.session.user = response[0];
+            return res.redirect('/tasks');
+          })
+          .catch((error) => {
+            console.log(error);
+            return res.status(400).send(error);
+          });
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(400).send(error)
+    });
 });
 
 module.exports = router;
