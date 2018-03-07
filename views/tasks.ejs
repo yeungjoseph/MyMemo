@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Memo - Tasks</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head> 
+  <body>
+    <% include header %>
+    <div class="task-container-all">
+        <div class="task-header-all">
+            <h1>Tasks Left (Total)</h1>
+        </div>
+        <div class="task-content-all">
+            <a href=# class="add-task">Add a task</a>
+        </div>
+    </div>
+    <div class="task-container-day">
+        <div class="task-header-day">
+            <h1>Tasks For the Day</h1>
+        </div>
+        <div class="task-content-day">
+            <a href=# class="add-task">Add a task</a>
+         </div>
+    </div>
+
+    <!-- Add task modal -->
+    <!-- How do I differentiate between day and all form? -->
+    <!-- How should I set up my task model -->
+    <div class="modal-container">
+        <div class="add-task-container">
+            <button class="close-form"><a href=#>X</a></button>
+            <h2 class="center">Add a Task</h2>
+        </div>
+        <div class="modal-background"></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        $('.add-task').click(function(e) {
+            $('.modal-container').addClass('show');
+        });
+        $('.modal-container').on('click', '.modal-background', function(e) {
+            $('.modal-container').removeClass('show');
+        });
+        $(".add-task-container").on('click', '.close-form', function(e) {
+			$('.modal-container').removeClass('show');
+		});
+    </script>
+  </body>
+</html>

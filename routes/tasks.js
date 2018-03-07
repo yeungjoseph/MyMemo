@@ -6,7 +6,7 @@ var router = express.Router();
 router.use(auth.requireLogin);
 
 router.get('/', function(req, res) {
-    res.send('Task List!');
+    res.render('tasks');
 });
 
 module.exports = router;

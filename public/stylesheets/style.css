@@ -9,6 +9,11 @@ a {
   color: #00B7FF;
 }
 
+.navbar-top {
+  float: right;
+  font-weight: bold;
+}
+
 .home-title-container {
   width: 300px;
   margin: auto;
@@ -32,18 +37,15 @@ a {
   height: 100%;
 }
 
-.login-container {
+.login-container, .register-container {
   width: 400px;
   height: 120px;
   margin: auto;
-  margin-top: 100px;
-  margin-bottom: 150px;
 }
 
-.register-container {
-  width: 400px;
-  height: 120px;
-  margin: auto;
+.login-container {
+  margin-top: 100px;
+  margin-bottom: 150px;
 }
 
 .form-field {
@@ -64,4 +66,69 @@ a {
 
 .btn-form-submit:active {
   background-color: rgb(19, 178, 241);
+}
+
+.task-container-all, .task-container-day {
+  width: 70%;
+  height: 100%;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.task-header-all, .task-header-day {
+  height: 120px;
+  padding-top: 2px;
+  text-align: center;
+  background-color: rgb(193, 236, 253);
+}
+
+.task-content-all, .task-content-day {
+  background-color: rgb(247, 247, 247);
+  padding: 12px 10px;
+}
+
+.modal-container {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: none;
+	position: fixed;
+}
+
+.show {
+  display: block;
+}
+
+.add-task-container {
+  height: 500px;
+  width: 350px;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+	position: absolute;
+  transform: translate(-50%, -50%);
+	padding: 15px 20px;
+	border-radius: 20px;
+	color: rgb(83, 203, 250);
+	background-color: white;
+}
+
+.modal-background {
+  background-color: rgba(0,0,0,0.5);
+	height: 100%;
+}
+
+.close-form {
+  float: right;
+  border: none;
+  outline: none;
+	font-weight: bold;
+  font-family: verdana;
+  color: rgb(83, 203, 250);
+  background-color: inherit;
+}
+
+.center {
+  text-align: center;
 }

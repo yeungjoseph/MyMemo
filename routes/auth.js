@@ -32,7 +32,7 @@ router.post('/login',  function(req, res) {
         if (response[0] !== undefined && response[0].checkPassword(password))
         {
             req.session.user = response[0];
-            return res.send('Login post'); 
+            return res.redirect('/tasks'); 
         }
         else
           return res.status(400).send('Invalid email or password');
