@@ -11,6 +11,7 @@ router.get('/', function(req, res) {
     res.render('tasks');
 });
 
+// Create a new task
 router.post('/', function(req, res) {
     const title = req.body.title.trim();
     const desc = req.body.desc.trim();

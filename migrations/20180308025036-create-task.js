@@ -1,8 +1,5 @@
 'use strict';
 
-/*const db = require('../models/index');
-const Users = db['User'];*/
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Tasks', {
@@ -24,6 +21,7 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
+        onDelete: 'cascade',
         references: {
           model: 'Users',
           key: 'id'
