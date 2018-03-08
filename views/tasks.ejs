@@ -28,9 +28,23 @@
     <!-- How should I set up my task model -->
     <div class="modal-container">
         <div class="add-task-container">
+
             <button class="close-form"><a href=#>X</a></button>
             <h2 class="center">Add a Task</h2>
+
+            <form class="add-task-form">
+                <label class="prettylabel">Title:</label><br/>
+                <input class="form-element" type="text" name="title" placeholder="Title of Task" required/><br/>
+                <label class="prettylabel">Description:</label><br/>
+                <textarea class="form-element" id="task-desc" rows="5" cols="40" placeholder="Description (Optional)"></textarea><br/>
+                <label class="prettylabel">Finish by:</label><br/>
+                <input class="form-element" type="date" name="finishBy"/><br/>
+
+                <input class="btn-form-submit" type="reset" value="Clear"/>
+                <input class="btn-form-submit" type="submit" value="Add"/>
+            </form>
         </div>
+
         <div class="modal-background"></div>
     </div>
 
@@ -44,7 +58,34 @@
         });
         $(".add-task-container").on('click', '.close-form', function(e) {
 			$('.modal-container').removeClass('show');
-		});
+        });
+        $(".add-task-form").submit(function(e) {
+            e.preventDefault();
+            var formData = {
+                title   : $('input[name=title]').val(),
+                content : $('#task-desc').val(),
+                finishBy: $('input[name=finishBy').val()
+            };
+            $.ajax({
+                method: 'POST',
+                url:    '/tasks',
+                data:   formData
+            })
+            .done(function(newTask) {
+                $('.task-content-all').append('<p>Added a task.</p>');
+                $('.modal-container').removeClass('show');
+                clearTaskForm();
+            })
+            .fail(function(err) {
+                console.log(err);
+            });
+        });
+
+        var clearTaskForm = () => {
+            $('input[name=title]').val('');
+            $('#task-desc').val('');
+            $('input[name=finishBy').val('');
+        };
     </script>
   </body>
 </html>

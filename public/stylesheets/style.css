@@ -129,6 +129,17 @@ a {
   background-color: inherit;
 }
 
+.prettylabel {
+	font-family: verdana;
+	font-weight: bold;
+  font-size: 12px;
+  color: inherit;
+}
+
+.form-element {
+  margin-bottom: 7px;
+}
+
 .center {
   text-align: center;
 }
