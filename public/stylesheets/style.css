@@ -1,7 +1,9 @@
 body {
-  padding: 50px;
+  padding: 0px;
+  margin: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   color: rgb(1, 149, 207);
+  min-height: 100%;
 }
 
 a {
@@ -11,6 +13,8 @@ a {
 
 .navbar-top {
   float: right;
+  padding-right: 25px;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
@@ -18,7 +22,9 @@ a {
   width: 300px;
   margin: auto;
   margin-bottom: 85px;
+  padding-top: 100px;
   text-align: center;
+  clear: right;
 }
 
 .home-link-container {
@@ -34,7 +40,6 @@ a {
 
 .auth-container {
   background-color: rgb(182, 237, 253);
-  height: 100%;
 }
 
 .login-container, .register-container {
@@ -44,8 +49,9 @@ a {
 }
 
 .login-container {
-  margin-top: 100px;
+  padding-top: 120px;
   margin-bottom: 150px;
+  clear: right;
 }
 
 .form-field {
@@ -68,23 +74,75 @@ a {
   background-color: rgb(19, 178, 241);
 }
 
+.task-display-pg {
+  background-color: rgb(247, 247, 247);
+}
+
+.search-bar {
+  background-color: white;
+  width: 350px;
+  height: 800px;
+  margin-top: 60px;
+  float: left;
+  position: fixed;
+}
+
 .task-container-all, .task-container-day {
-  width: 70%;
+  clear: right;
+  width: 700px;
   height: 100%;
-  margin: auto;
-  margin-top: 50px;
+  margin-left: 355px;
+  /*margin-top: 50px;*/
 }
 
 .task-header-all, .task-header-day {
   height: 120px;
   padding-top: 2px;
-  text-align: center;
   background-color: rgb(193, 236, 253);
 }
 
 .task-content-all, .task-content-day {
-  background-color: rgb(247, 247, 247);
-  padding: 12px 10px;
+  /*background-color: rgb(247, 247, 247);*/
+}
+
+.task-singular-container {
+  height: 40px;
+  padding-left: 6px;
+  width: 694px;
+  margin: auto;
+  margin-bottom: 5px;
+  background-color: white;
+}
+
+.task-title-header {
+  padding-left: 20px;
+  width: 500px;
+}
+
+.task-date-header, .task-title-header {
+  font-weight: bold;
+  display: inline-block;
+}
+
+.task-title, .task-date {
+  display: inline-block;
+}
+
+.task-title {
+  width: 500px;
+}
+
+.task-date {
+  width: 120px;
+}
+
+.add-task-all, .add-task-day {
+  display: inline-block;
+  margin: 14px 0px;
+}
+
+.btn-task-switcher {
+  margin-left: 30px;
 }
 
 .modal-container {

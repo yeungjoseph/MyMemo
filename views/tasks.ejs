@@ -4,28 +4,67 @@
     <title>My Memo - Tasks</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head> 
-  <body>
+  <body class="task-display-pg">
     <% include header %>
+    <div class="search-bar">
+
+    </div>
+    <!-- All tasks list -->
     <div class="task-container-all">
         <div class="task-header-all">
-            <h1>Tasks Left (Total)</h1>
+            <h1 class="center">Tasks Left (Total)</h1>
+            <p class="task-title-header">Task</p>
+            <p class="task-date-header">Finish By</p>
         </div>
         <div class="task-content-all">
-            <a href=# class="add-task">Add a task</a>
+            <% for (var i = 0; i < tasklist.length; i++) { %>
+                <% if (!tasklist[i].inProg) { %>
+                    <div class="task-singular-container">
+                        <i class="fas fa-minus-circle"></i>
+                        <p class="task-title"><%= tasklist[i].title %></p>
+                        <% if (tasklist[i].finishBy) { %>
+                        <p class="task-date"><%= tasklist[i].finishBy.toDateString() %></p>
+                        <% } else { %>
+                        <p class="task-date">N/A</p>
+                        <% } %>
+                        <i class="fas fa-arrows-alt-v btn-task-switcher"></i>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+        <div class="task-singular-container">
+            <a href=# class="add-task-all">Add a task</a>
         </div>
     </div>
+    <!-- Daily task list-->
     <div class="task-container-day">
         <div class="task-header-day">
-            <h1>Tasks For the Day</h1>
+            <h1 class="center">Tasks For the Day</h1>
+            <p class="task-title-header">Task</p>
+            <p class="task-date-header">Finish By</p>
         </div>
         <div class="task-content-day">
-            <a href=# class="add-task">Add a task</a>
+            <% for (var i = 0; i < tasklist.length; i++) { %>
+                <% if (tasklist[i].inProg) { %>
+                    <div class="task-singular-container">
+                        <i class="fas fa-minus-circle"></i>
+                        <p class="task-title"><%= tasklist[i].title %></p>
+                        <% if (tasklist[i].finishBy) { %>
+                        <p class="task-date"><%= tasklist[i].finishBy.toDateString() %></p>
+                        <% } else { %>
+                        <p class="task-date">N/A</p>
+                        <% } %>
+                        <i class="fas fa-arrows-alt-v btn-task-switcher"></i>
+                    </div>
+                <% } %>
+            <% } %>
          </div>
+         <div class="task-singular-container">
+            <a href=# class="add-task-day">Add a task</a>
+        </div>
     </div>
 
     <!-- Add task modal -->
-    <!-- How do I differentiate between day and all form? -->
-    <!-- How should I set up my task model -->
     <div class="modal-container">
         <div class="add-task-container">
 
@@ -48,10 +87,16 @@
         <div class="modal-background"></div>
     </div>
 
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
-        $('.add-task').click(function(e) {
+        $('.add-task-all').click(function(e) {
             $('.modal-container').addClass('show');
+            $('.add-task-form').attr('day', false);
+        });
+        $('.add-task-day').click(function(e) {
+            $('.modal-container').addClass('show');
+            $('.add-task-form').attr('day', true);
         });
         $('.modal-container').on('click', '.modal-background', function(e) {
             $('.modal-container').removeClass('show');
@@ -64,7 +109,8 @@
             var formData = {
                 title   : $('input[name=title]').val(),
                 desc    : $('#task-desc').val(),
-                finishBy: $('input[name=finishBy').val()
+                finishBy: $('input[name=finishBy').val(),
+                inProg  : $('.add-task-form').attr('day')
             };
             $.ajax({
                 method: 'POST',
@@ -72,7 +118,17 @@
                 data:   formData
             })
             .done(function(newTask) {
-                $('.task-content-all').append('<p>Added a task.</p>');
+                if (newTask.finishBy) {
+                    newTask.finishBy = new Date(newTask.finishBy).toDateString();
+                }
+                else {
+                    newTask.finishBy = "N/A";
+                }
+                if (formData.inProg)
+                    var allOrDay = 'day';
+                else
+                    var allOrDay = 'all';
+                addTask(newTask.title, newTask.finishBy, allOrDay);
                 $('.modal-container').removeClass('show');
                 clearTaskForm();
             })
@@ -80,6 +136,16 @@
                 console.log(err);
             });
         });
+
+        var addTask = (title, date, allOrDay) => {
+            $(`.task-content-${allOrDay}`).append(
+            `<div class="task-singular-container">
+                <i class="fas fa-minus-circle"></i>
+                <p class="task-title">${title}</p>
+                <p class="task-date">${date}</p>
+                <i class="fas fa-arrows-alt-v btn-task-switcher"></i>
+            </div>`);
+        };
 
         var clearTaskForm = () => {
             $('input[name=title]').val('');

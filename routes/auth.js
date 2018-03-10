@@ -17,9 +17,9 @@ router.get('/logout', function(req, res) {
 // Login route
 router.post('/login',  function(req, res) {
   const email = req.body.email.trim();
-  const password = req.body.password.trim();
+  const password = req.body.password;
 
-  if (email === '' || password === '')
+  if (email === '' || password.trim() === '')
       return res.status(400).send('Invalid email or password');
 
   const select = 'SELECT * FROM "Users" WHERE email = ?';
