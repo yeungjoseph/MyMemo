@@ -7,6 +7,7 @@ const Tasks = db['Tasks'];
 
 router.use(auth.requireLogin);
 
+// Display user tasks
 router.get('/', function(req, res) {
     const userId = req.user.id;
     const select = 'SELECT * FROM "Tasks" WHERE "userId"=?';
@@ -57,13 +58,25 @@ router.post('/', function(req, res) {
             })
             .catch((error) => {
                 console.log(error);
-                return res.status(400).send(error);
+                return res.status(501).send(error);
             });
         })
         .catch(error => {
             console.log(error);
-            res.status(400).send(error)
+            res.status(501).send(error)
         });
+});
+
+// Delete a task
+router.delete('/:id', function(req, res) {
+    const del = 'DELETE FROM "Tasks" WHERE id = ?';
+    return db.sequelize
+        .query(del, {
+            replacements: [req.params.id.trim()],
+            type: db.sequelize.QueryTypes.DELETE,
+        })
+        .then((response) => res.send(response))
+        .catch((error) => res.status(501).send(error));
 });
 
 module.exports = router;

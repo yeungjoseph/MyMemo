@@ -142,7 +142,7 @@ a {
 }
 
 .btn-task-switcher {
-  margin-left: 30px;
+  margin-left: 20px;
 }
 
 .modal-container {
@@ -185,6 +185,12 @@ a {
   font-family: verdana;
   color: rgb(83, 203, 250);
   background-color: inherit;
+}
+
+.btn-delete {
+  background-color: inherit;
+  color: inherit;
+  border: none;
 }
 
 .prettylabel {

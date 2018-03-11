@@ -20,7 +20,7 @@ router.post('/login',  function(req, res) {
   const password = req.body.password;
 
   if (email === '' || password.trim() === '')
-      return res.status(400).send('Invalid email or password');
+      return res.status(401).send('Invalid email or password');
 
   const select = 'SELECT * FROM "Users" WHERE email = ?';
   return db.sequelize
@@ -35,11 +35,11 @@ router.post('/login',  function(req, res) {
             return res.redirect('/tasks'); 
         }
         else
-          return res.status(400).send('Invalid email or password');
+          return res.status(401).send('Invalid email or password');
     })
     .catch((error) => {
         console.log(error);
-        res.status(400).send(error);
+        res.status(501).send(error);
     });
 });
 
@@ -50,7 +50,7 @@ router.post('/user',function(req, res) {
   let password = req.body.password.trim();
 
   if (email === '' || password === '')
-      return res.status(400).send('Invalid email or password');
+      return res.status(401).send('Invalid email or password');
 
   password = Users.hashPassword(password, saltRounds);
   const insert = 'INSERT INTO "Users" (email, password) VALUES (?, ?) RETURNING id';
@@ -75,12 +75,12 @@ router.post('/user',function(req, res) {
           })
           .catch((error) => {
             console.log(error);
-            return res.status(400).send(error);
+            return res.status(501).send(error);
           });
     })
     .catch(error => {
       console.log(error);
-      res.status(400).send(error)
+      res.status(501).send(error)
     });
 });
 

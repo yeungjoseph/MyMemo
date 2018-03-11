@@ -20,7 +20,7 @@
             <% for (var i = 0; i < tasklist.length; i++) { %>
                 <% if (!tasklist[i].inProg) { %>
                     <div class="task-singular-container">
-                        <i class="fas fa-minus-circle"></i>
+                        <button class="btn-delete" data-task-id="<%= tasklist[i].id %>"><i class="fas fa-minus-circle"></i></button>
                         <p class="task-title"><%= tasklist[i].title %></p>
                         <% if (tasklist[i].finishBy) { %>
                         <p class="task-date"><%= tasklist[i].finishBy.toDateString() %></p>
@@ -47,7 +47,7 @@
             <% for (var i = 0; i < tasklist.length; i++) { %>
                 <% if (tasklist[i].inProg) { %>
                     <div class="task-singular-container">
-                        <i class="fas fa-minus-circle"></i>
+                        <button class="btn-delete" data-task-id="<%= tasklist[i].id %>"><i class="fas fa-minus-circle"></i></button>
                         <p class="task-title"><%= tasklist[i].title %></p>
                         <% if (tasklist[i].finishBy) { %>
                         <p class="task-date"><%= tasklist[i].finishBy.toDateString() %></p>
@@ -90,6 +90,21 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
+        $('.task-display-pg').on('click', '.btn-delete', function (e) {
+            const id = $(this).attr('data-task-id');
+            const button = $(this);
+
+            $.ajax({
+                method: 'DELETE',
+                url: `/tasks/${id}`
+            })
+            .done(function(response) {
+                button.parent().remove();
+            })
+            .fail(function(err) {
+                console.log(err);
+            });
+        });
         $('.add-task-all').click(function(e) {
             $('.modal-container').addClass('show');
             $('.add-task-form').attr('day', false);
@@ -118,17 +133,17 @@
                 data:   formData
             })
             .done(function(newTask) {
+                let allOrDay = 'all'
+                if (formData.inProg === 'true') {
+                    allOrDay = 'day';
+                }
                 if (newTask.finishBy) {
                     newTask.finishBy = new Date(newTask.finishBy).toDateString();
                 }
                 else {
                     newTask.finishBy = "N/A";
                 }
-                if (formData.inProg)
-                    var allOrDay = 'day';
-                else
-                    var allOrDay = 'all';
-                addTask(newTask.title, newTask.finishBy, allOrDay);
+                addTask(newTask.title, newTask.finishBy, newTask.id, allOrDay);
                 $('.modal-container').removeClass('show');
                 clearTaskForm();
             })
@@ -137,10 +152,12 @@
             });
         });
 
-        var addTask = (title, date, allOrDay) => {
+        var addTask = (title, date, id, allOrDay) => {
+            console.log("Entered addTask");
+            console.log(allOrDay);
             $(`.task-content-${allOrDay}`).append(
             `<div class="task-singular-container">
-                <i class="fas fa-minus-circle"></i>
+                <button class="btn-delete" data-task-id="${id}"><i class="fas fa-minus-circle"></i></button>
                 <p class="task-title">${title}</p>
                 <p class="task-date">${date}</p>
                 <i class="fas fa-arrows-alt-v btn-task-switcher"></i>
