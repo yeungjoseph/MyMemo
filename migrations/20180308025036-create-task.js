@@ -13,11 +13,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      descr: {
+      description: {
         type: Sequelize.STRING
       },
       finishBy: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       userId: {
         type: Sequelize.INTEGER,

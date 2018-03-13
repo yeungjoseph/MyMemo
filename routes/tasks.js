@@ -28,7 +28,7 @@ router.get('/', function(req, res) {
 // Create a new task
 router.post('/', function(req, res) {
     const title = req.body.title.trim();
-    const desc = req.body.desc.trim();
+    const description = req.body.desc.trim();
     let finishBy = req.body.finishBy.trim();
     const userId = req.user.id;
     const inProg = req.body.inProg.trim();
@@ -38,10 +38,10 @@ router.post('/', function(req, res) {
     if (finishBy === '')
         finishBy = null;
 
-    const insert = 'INSERT INTO "Tasks" (title, descr, "finishBy", "userId", "inProg") VALUES (?, ?, ?, ?, ?) RETURNING id'
+    const insert = 'INSERT INTO "Tasks" (title, description, "finishBy", "userId", "inProg") VALUES (?, ?, ?, ?, ?) RETURNING id'
     return db.sequelize
         .query(insert, {
-            replacements: [title, desc, finishBy, userId, inProg],
+            replacements: [title, description, finishBy, userId, inProg],
             type: db.sequelize.QueryTypes.INSERT,
         })
         .spread((results, metadata) => {

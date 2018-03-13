@@ -3,8 +3,8 @@
 module.exports = (sequelize, DataTypes) => {
   var Task = sequelize.define('Task', {
     title: DataTypes.STRING,
-    desc: DataTypes.STRING,
-    finishBy: DataTypes.DATE
+    description: DataTypes.STRING,
+    finishBy: DataTypes.DATEONLY
   }, {});
 
   Task.associate = function(models) {

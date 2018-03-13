@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     password: { type: DataTypes.STRING, allowNull: false }
   }, {});
 
-  User.hashPassword = function(password, saltRounds) {
+  User.hashPassword = function(password) {
+    const saltRounds = 10;
     return bcrypt.hashSync(password, saltRounds);
   };
 

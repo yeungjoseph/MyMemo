@@ -45,14 +45,13 @@ router.post('/login',  function(req, res) {
 
 // Registration route
 router.post('/user',function(req, res) {
-  const saltRounds = 10;
   const email = req.body.email.trim();
   let password = req.body.password.trim();
 
   if (email === '' || password === '')
       return res.status(401).send('Invalid email or password');
 
-  password = Users.hashPassword(password, saltRounds);
+  password = Users.hashPassword(password);
   const insert = 'INSERT INTO "Users" (email, password) VALUES (?, ?) RETURNING id';
   
   return db.sequelize

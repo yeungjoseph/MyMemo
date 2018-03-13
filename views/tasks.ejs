@@ -23,7 +23,7 @@
                         <button class="btn-delete" data-task-id="<%= tasklist[i].id %>"><i class="fas fa-minus-circle"></i></button>
                         <p class="task-title"><%= tasklist[i].title %></p>
                         <% if (tasklist[i].finishBy) { %>
-                        <p class="task-date"><%= tasklist[i].finishBy.toDateString() %></p>
+                        <p class="task-date"><%= new Date(tasklist[i].finishBy + " PST").toDateString() %></p>
                         <% } else { %>
                         <p class="task-date">N/A</p>
                         <% } %>
@@ -50,7 +50,7 @@
                         <button class="btn-delete" data-task-id="<%= tasklist[i].id %>"><i class="fas fa-minus-circle"></i></button>
                         <p class="task-title"><%= tasklist[i].title %></p>
                         <% if (tasklist[i].finishBy) { %>
-                        <p class="task-date"><%= tasklist[i].finishBy.toDateString() %></p>
+                        <p class="task-date"><%= new Date(tasklist[i].finishBy + " PST").toDateString() %></p>
                         <% } else { %>
                         <p class="task-date">N/A</p>
                         <% } %>
@@ -72,12 +72,12 @@
             <h2 class="center">Add a Task</h2>
 
             <form class="add-task-form">
-                <label class="prettylabel">Title:</label><br/>
-                <input class="form-element" type="text" name="title" placeholder="Title of Task" required/><br/>
-                <label class="prettylabel">Description:</label><br/>
+                <label class="prettylabel" for="task-title">Title:</label><br/>
+                <input class="form-element"  id="task-title" type="text" name="title" placeholder="Title of Task" required/><br/>
+                <label class="prettylabel" for="task-desc">Description:</label><br/>
                 <textarea class="form-element" id="task-desc" rows="5" cols="40" placeholder="Description (Optional)"></textarea><br/>
-                <label class="prettylabel">Finish by:</label><br/>
-                <input class="form-element" type="date" name="finishBy"/><br/>
+                <label class="prettylabel" for="task-date">Finish by:</label><br/>
+                <input class="form-element" id="task-date" type="date" name="finishBy"/><br/>
 
                 <input class="btn-form-submit" type="reset" value="Clear"/>
                 <input class="btn-form-submit" type="submit" value="Add"/>
@@ -90,6 +90,13 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
+        // Form data references
+        const title       = $('#task-title');
+        const description = $('#task-desc');
+        const finishBy    = $('#task-date');
+        const addTaskForm = $('.add-task-form');
+        const modalContain= $('.modal-container');
+
         $('.task-display-pg').on('click', '.btn-delete', function (e) {
             const id = $(this).attr('data-task-id');
             const button = $(this);
@@ -106,27 +113,28 @@
             });
         });
         $('.add-task-all').click(function(e) {
-            $('.modal-container').addClass('show');
-            $('.add-task-form').attr('day', false);
+            modalContain.addClass('show');
+            addTaskForm.attr('day', 'false');
         });
         $('.add-task-day').click(function(e) {
-            $('.modal-container').addClass('show');
-            $('.add-task-form').attr('day', true);
+            modalContain.addClass('show');
+            addTaskForm.attr('day', 'true');
         });
         $('.modal-container').on('click', '.modal-background', function(e) {
-            $('.modal-container').removeClass('show');
+            modalContain.removeClass('show');
         });
         $(".add-task-container").on('click', '.close-form', function(e) {
-			$('.modal-container').removeClass('show');
+			modalContain.removeClass('show');
         });
         $(".add-task-form").submit(function(e) {
             e.preventDefault();
             var formData = {
-                title   : $('input[name=title]').val(),
-                desc    : $('#task-desc').val(),
-                finishBy: $('input[name=finishBy').val(),
-                inProg  : $('.add-task-form').attr('day')
+                title   : title.val(),
+                desc    : description.val(),
+                finishBy: finishBy.val(),
+                inProg  : addTaskForm.attr('day')
             };
+            console.log(formData.finishBy);
             $.ajax({
                 method: 'POST',
                 url:    '/tasks',
@@ -138,13 +146,13 @@
                     allOrDay = 'day';
                 }
                 if (newTask.finishBy) {
-                    newTask.finishBy = new Date(newTask.finishBy).toDateString();
+                    newTask.finishBy = new Date(newTask.finishBy + " PST").toDateString();
                 }
                 else {
                     newTask.finishBy = "N/A";
                 }
                 addTask(newTask.title, newTask.finishBy, newTask.id, allOrDay);
-                $('.modal-container').removeClass('show');
+                modalContain.removeClass('show');
                 clearTaskForm();
             })
             .fail(function(err) {
@@ -153,8 +161,6 @@
         });
 
         var addTask = (title, date, id, allOrDay) => {
-            console.log("Entered addTask");
-            console.log(allOrDay);
             $(`.task-content-${allOrDay}`).append(
             `<div class="task-singular-container">
                 <button class="btn-delete" data-task-id="${id}"><i class="fas fa-minus-circle"></i></button>
@@ -165,9 +171,9 @@
         };
 
         var clearTaskForm = () => {
-            $('input[name=title]').val('');
-            $('#task-desc').val('');
-            $('input[name=finishBy').val('');
+            title.val('');
+            description.val('');
+            finishBy.val('');
         };
     </script>
   </body>
