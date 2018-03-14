@@ -75,7 +75,7 @@ router.delete('/:id', function(req, res) {
             replacements: [req.params.id.trim()],
             type: db.sequelize.QueryTypes.DELETE,
         })
-        .then((response) => res.send(response))
+        .then((response) => res.send("Successful delete"))
         .catch((error) => res.status(501).send(error));
 });
 
