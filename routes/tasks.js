@@ -63,7 +63,7 @@ router.post('/', function(req, res) {
         })
         .catch(error => {
             console.log(error);
-            res.status(501).send(error)
+            res.status(501).send(error);
         });
 });
 
@@ -76,7 +76,26 @@ router.delete('/:id', function(req, res) {
             type: db.sequelize.QueryTypes.DELETE,
         })
         .then((response) => res.send("Successful delete"))
-        .catch((error) => res.status(501).send(error));
+        .catch((error) => {
+            console.log(error);
+            res.status(501).send(error);
+        });
+});
+
+// Toggle a task's progress
+router.patch('/:id/inProg', function(req, res) {
+    const update = 'UPDATE "Tasks" SET "inProg" = ? WHERE id = ?'
+    let   inProg = (req.body.inProg === 'true' ? false : true);
+    return db.sequelize
+        .query(update, {
+            replacements: [inProg, req.params.id.trim()],
+            type: db.sequelize.QueryTypes.PATCH
+        })
+        .then((response) => res.send())
+        .catch((error) => {
+            console.log(error);
+            res.status(501).send(error);
+        });
 });
 
 module.exports = router;
