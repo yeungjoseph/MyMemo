@@ -19,8 +19,9 @@
         <div class="task-content-all">
             <% for (var i = 0; i < tasklist.length; i++) { %>
                 <% if (!tasklist[i].inProg) { %>
-                    <div class="task-singular-container" data-task-inProg="false">
-                        <button class="btn-delete" data-task-id="<%= tasklist[i].id %>"><i class="fas fa-minus-circle"></i></button>
+                    <div class="task-singular-container" data-task-inProg="false" data-task-id="<%= tasklist[i].id %>" data-task-description="<%= tasklist[i].description %>">
+                        <button class="btn-delete"><i class="fas fa-minus-circle"></i></button>
+                        <button class="btn-edit"><i class="fas fa-pencil-alt"></i></button>
                         <p class="task-title"><%= tasklist[i].title %></p>
                         <% if (tasklist[i].finishBy) { %>
                         <p class="task-date"><%= new Date(tasklist[i].finishBy + " PST").toDateString() %></p>
@@ -46,8 +47,9 @@
         <div class="task-content-day">
             <% for (var i = 0; i < tasklist.length; i++) { %>
                 <% if (tasklist[i].inProg) { %>
-                    <div class="task-singular-container" data-task-inProg="true">
-                        <button class="btn-delete" data-task-id="<%= tasklist[i].id %>"><i class="fas fa-minus-circle"></i></button>
+                    <div class="task-singular-container" data-task-inProg="true" data-task-id="<%= tasklist[i].id %>" data-task-description="<%= tasklist[i].description %>">
+                        <button class="btn-delete"><i class="fas fa-minus-circle"></i></button>
+                        <button class="btn-edit"><i class="fas fa-pencil-alt"></i></button>
                         <p class="task-title"><%= tasklist[i].title %></p>
                         <% if (tasklist[i].finishBy) { %>
                         <p class="task-date"><%= new Date(tasklist[i].finishBy + " PST").toDateString() %></p>
@@ -65,7 +67,7 @@
     </div>
 
     <!-- Add task modal -->
-    <div class="modal-container">
+    <div class="add-modal-container">
         <div class="add-task-container">
 
             <button class="close-form"><a href=#>X</a></button>
@@ -73,9 +75,9 @@
 
             <form class="add-task-form">
                 <label class="prettylabel" for="task-title">Title:</label><br/>
-                <input class="form-element"  id="task-title" type="text" name="title" placeholder="Title of Task" required/><br/>
+                <input class="form-element"  id="task-title" type="text" name="title" placeholder="Title of Task" maxlength="40" required/><br/>
                 <label class="prettylabel" for="task-desc">Description:</label><br/>
-                <textarea class="form-element" id="task-desc" rows="5" cols="40" placeholder="Description (Optional)"></textarea><br/>
+                <textarea class="form-element" id="task-desc" rows="5" cols="40" placeholder="Description (Optional)" maxlength="200"></textarea><br/>
                 <label class="prettylabel" for="task-date">Finish by:</label><br/>
                 <input class="form-element" id="task-date" type="date" name="finishBy"/><br/>
 
@@ -87,21 +89,50 @@
         <div class="modal-background"></div>
     </div>
 
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <!-- Edit task modal -->
+    <div class="edit-modal-container">
+        <div class="edit-task-container">
+
+            <button class="close-form"><a href=#>X</a></button>
+            <h2 class="center">Edit Task</h2>
+
+            <form class="edit-task-form">
+                <label class="prettylabel" for="edit-task-title">Title:</label><br/>
+                <input class="form-element"  id="edit-task-title" type="text" name="title" placeholder="Title of Task" maxlength="40" required/><br/>
+                <label class="prettylabel" for="edit-task-description">Description:</label><br/>
+                <textarea class="form-element" id="edit-task-description" rows="5" cols="40" placeholder="Description (Optional)" maxlength="200"></textarea><br/>
+                <label class="prettylabel" for="edit-task-date">Finish by:</label><br/>
+                <input class="form-element" id="edit-task-date" type="date" name="finishBy"/><br/>
+
+                <input class="btn-form-submit" type="reset" value="Clear"/>
+                <input class="btn-form-submit" type="submit" value="Save"/>
+            </form>
+        </div>
+
+        <div class="modal-background"></div>
+    </div>
+    
+
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
         // Form data references
         const title       = $('#task-title');
         const description = $('#task-desc');
         const finishBy    = $('#task-date');
+        const editTitle       = $('#edit-task-title');
+        const editDescription = $('#edit-task-description');
+        const editFinishBy    = $('#edit-task-date');
         const addTaskForm = $('.add-task-form');
-        const modalContain= $('.modal-container');
+        const editTaskForm= $('.edit-task-form');
+        const modalContain= $('.add-modal-container');
+        const editModal   = $('.edit-modal-container');
         const addTaskAll  = $('.add-task-all');
         const addTaskDay  = $('.add-task-day');
         const taskPage    = $('.task-display-pg');
 
         taskPage.on('click', '.btn-delete', function (e) {
-            const id = $(this).attr('data-task-id');
+            const id = $(this).parent().attr('data-task-id');
             const button = $(this);
 
             $.ajax({
@@ -116,8 +147,7 @@
             });
         });
         taskPage.on('click', '.btn-task-switcher', function (e) {
-            console.log('clicked!!!');
-            const id = $(this).siblings('.btn-delete').attr('data-task-id');
+            const id = $(this).parent().attr('data-task-id');
             const inProg = $(this).parent().attr('data-task-inProg');
             const button = $(this);
 
@@ -129,20 +159,36 @@
                 }
             })
             .done(function(response) {
+                const description = button.parent().attr('data-task-description');
+                const finishBy    = button.siblings('.task-date').html();
+                const title       = button.siblings('.task-title').html();
                 button.parent().remove();
                 // add task to other container
-                const finishBy = button.siblings('.task-date').html();
-                console.log(finishBy);
-                const title    = button.siblings('.task-title').html();
                 let allOrDay = 'day'
                 if (inProg === 'true') {
                     allOrDay = 'all';
                 }
-                addTask(title, finishBy, id, allOrDay);
+                addTask(title, finishBy, description, id, allOrDay);
             })
             .fail(function(err) {
                 console.log(err);
             });
+        });
+        taskPage.on('click', '.btn-edit', function(e) {
+            const button     = $(this);
+            const id         = button.parent().attr('data-task-id');
+            const title      = button.siblings('.task-title').html();
+            const description= button.parent().attr('data-task-description');
+            const finishBy   = button.siblings('.task-date').html();
+            editTaskForm.attr('form-task-id', id)
+
+            $('#edit-task-title').val(title);
+            $('#edit-task-description').val(description);
+            if (finishBy !== 'N/A')
+                $('#edit-task-date').val(new Date(finishBy).toISOString().substr(0,10));
+            else
+                $('#edit-task-date').val('');
+            editModal.addClass('show');
         });
         addTaskAll.click(function(e) {
             modalContain.addClass('show');
@@ -158,7 +204,13 @@
         $(".add-task-container").on('click', '.close-form', function(e) {
 			modalContain.removeClass('show');
         });
-        $(".add-task-form").submit(function(e) {
+        editModal.on('click', '.modal-background', function(e) {
+            editModal.removeClass('show');
+        });
+        $(".edit-task-container").on('click', '.close-form', function(e) {
+			editModal.removeClass('show');
+        });
+        addTaskForm.submit(function(e) {
             e.preventDefault();
             var formData = {
                 title   : title.val(),
@@ -182,7 +234,7 @@
                 else {
                     newTask.finishBy = "N/A";
                 }
-                addTask(newTask.title, newTask.finishBy, newTask.id, allOrDay);
+                addTask(newTask.title, newTask.finishBy, newTask.description, newTask.id, allOrDay);
                 modalContain.removeClass('show');
                 clearTaskForm();
             })
@@ -190,14 +242,47 @@
                 console.log(err);
             });
         });
+        editTaskForm.submit(function(e) {
+            e.preventDefault();
+            const id = $(this).attr('form-task-id');
+            var formData = {
+                title   : editTitle.val(),
+                desc    : editDescription.val(),
+                finishBy: editFinishBy.val(),
+            };
+            $.ajax({
+                method: 'PATCH',
+                url:    `/tasks/${id}`,
+                data:   formData
+            })
+            .done(function(response) {
+                // Dynamically redisplay task container contents
+                if (formData.finishBy) {
+                    formData.finishBy = new Date(formData.finishBy + " PST").toDateString();
+                }
+                else {
+                    formData.finishBy = "N/A";
+                }
+                const task = $(`div[data-task-id=${id}]`)
+                task.children('.task-title').html(formData.title);
+                task.children('.task-date').html(formData.finishBy);
+                task.attr('data-task-description', formData.desc);
 
-        var addTask = (title, date, id, allOrDay) => {
+                editModal.removeClass('show');
+            })
+            .fail(function(err) {
+                console.log(err);
+            });
+        });
+
+        var addTask = (title, date, description, id, allOrDay) => {
             let inProg = "true";
             if (allOrDay === "all")
                 inProg = "false";
             $(`.task-content-${allOrDay}`).append(
-            `<div class="task-singular-container" data-task-inProg=${inProg}>
-                <button class="btn-delete" data-task-id="${id}"><i class="fas fa-minus-circle"></i></button>
+            `<div class="task-singular-container" data-task-inProg=${inProg} data-task-id="${id}" data-task-description="${description}">
+                <button class="btn-delete"><i class="fas fa-minus-circle"></i></button>
+                <button class="btn-edit"><i class="fas fa-pencil-alt"></i></button>
                 <p class="task-title">${title}</p>
                 <p class="task-date">${date}</p>
                 <i class="fas fa-arrows-alt-v btn-task-switcher"></i>

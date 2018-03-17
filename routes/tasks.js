@@ -91,7 +91,31 @@ router.patch('/:id/inProg', function(req, res) {
             replacements: [inProg, req.params.id.trim()],
             type: db.sequelize.QueryTypes.PATCH
         })
-        .then((response) => res.send())
+        .then((response) => res.send('Updated inProg status'))
+        .catch((error) => {
+            console.log(error);
+            res.status(501).send(error);
+        });
+});
+
+router.patch('/:id', function(req ,res) {
+    const title = req.body.title.trim();
+    const description = req.body.desc.trim();
+    let finishBy = req.body.finishBy.trim();
+    const taskId = req.params.id.trim();
+    if (title === '')
+        return res.status(400).send('Task Title cannot be empty');
+    if (finishBy === '')
+        finishBy = null;
+
+    const update = 'UPDATE "Tasks" SET "title" = ?, "description" = ?, "finishBy" = ? WHERE id = ?'
+
+    return db.sequelize
+        .query(update, {
+            replacements: [title, description, finishBy, taskId],
+            type: db.sequelize.QueryTypes.PATCH
+        })
+        .then((response) => res.send('Updated task'))
         .catch((error) => {
             console.log(error);
             res.status(501).send(error);

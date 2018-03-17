@@ -11,6 +11,10 @@ a {
   color: #00B7FF;
 }
 
+textarea {
+  resize: none;
+}
+
 .navbar-top {
   float: right;
   padding-right: 25px;
@@ -115,8 +119,8 @@ a {
 }
 
 .task-title-header {
-  padding-left: 20px;
-  width: 520px;
+  padding-left: 40px;
+  width: 475px;
 }
 
 .task-date-header, .task-title-header {
@@ -129,7 +133,9 @@ a {
 }
 
 .task-title {
-  width: 500px;
+  width: 470px;
+  margin: 0px;
+  overflow: hidden;
 }
 
 .task-date {
@@ -145,7 +151,7 @@ a {
   margin-left: 20px;
 }
 
-.modal-container {
+.add-modal-container, .edit-modal-container {
 	top: 0;
 	bottom: 0;
 	right: 0;
@@ -158,7 +164,7 @@ a {
   display: block;
 }
 
-.add-task-container {
+.add-task-container, .edit-task-container {
   height: 500px;
   width: 350px;
   top: 50%;
@@ -187,7 +193,8 @@ a {
   background-color: inherit;
 }
 
-.btn-delete {
+.btn-delete, .btn-edit {
+  padding: 1px;
   background-color: inherit;
   color: inherit;
   border: none;
