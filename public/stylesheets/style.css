@@ -96,17 +96,12 @@ textarea {
   width: 700px;
   height: 100%;
   margin-left: 355px;
-  /*margin-top: 50px;*/
 }
 
 .task-header-all, .task-header-day {
   height: 120px;
   padding-top: 2px;
   background-color: rgb(193, 236, 253);
-}
-
-.task-content-all, .task-content-day {
-  /*background-color: rgb(247, 247, 247);*/
 }
 
 .task-singular-container {
@@ -165,7 +160,7 @@ textarea {
 }
 
 .add-task-container, .edit-task-container {
-  height: 500px;
+  height: 380px;
   width: 350px;
   top: 50%;
   left: 50%;
@@ -207,8 +202,34 @@ textarea {
   color: inherit;
 }
 
+#search-input {
+  height: 20px;
+  margin-top: 15px;
+  margin-left: 40px;
+  margin-right: 0px;
+}
+
+#search-submit {
+  height: 26px;
+  margin-left: 0px;
+  background-color: rgb(83, 203, 250);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+#search-submit:active {
+  background-color: rgb(19, 178, 241);
+}
+
+#search-submit:hover, .btn-delete:hover, 
+.btn-task-switcher:hover, .btn-edit:hover {
+  cursor: pointer;
+}
+
 .form-element {
   margin-bottom: 7px;
+  border: 1px solid rgb(83, 203, 250);
 }
 
 .center {

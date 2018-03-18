@@ -7,7 +7,8 @@
   <body class="task-display-pg">
     <% include header %>
     <div class="search-bar">
-
+        <input id="search-input" type="text" name="search-input" placeholder="Search.."/>
+        <input id="search-submit" type="submit" value="Search" />
     </div>
     <!-- All tasks list -->
     <div class="task-container-all">
@@ -130,7 +131,13 @@
         const addTaskAll  = $('.add-task-all');
         const addTaskDay  = $('.add-task-day');
         const taskPage    = $('.task-display-pg');
+        const searchBar   = $('.search-bar');
+        const searchSubmit= $('#search-submit');
+        const searchInput = $('#search-input')
 
+        searchBar.on('click', searchSubmit, function (e) {
+            console.log(searchInput.val());
+        });
         taskPage.on('click', '.btn-delete', function (e) {
             const id = $(this).parent().attr('data-task-id');
             const button = $(this);
