@@ -7,8 +7,12 @@
   <body class="task-display-pg">
     <% include header %>
     <div class="search-bar">
+        <h3>Find a Task!</h3>
         <input id="search-input" type="text" name="search-input" placeholder="Search.."/>
         <input id="search-submit" type="submit" value="Search" />
+        <h3 id="search-date-header">Or Search by Date...</h3>
+        <input id="search-date-input" type="date" name="search-date-input"/>
+        <input id="search-date-submit" type="submit" value="Search" />
     </div>
     <!-- All tasks list -->
     <div class="task-container-all">
@@ -34,7 +38,7 @@
                 <% } %>
             <% } %>
         </div>
-        <div class="task-singular-container">
+        <div class="add-singular-container">
             <a href=# class="add-task-all">Add a task</a>
         </div>
     </div>
@@ -62,7 +66,7 @@
                 <% } %>
             <% } %>
          </div>
-         <div class="task-singular-container">
+         <div class="add-singular-container">
             <a href=# class="add-task-day">Add a task</a>
         </div>
     </div>
@@ -132,11 +136,32 @@
         const addTaskDay  = $('.add-task-day');
         const taskPage    = $('.task-display-pg');
         const searchBar   = $('.search-bar');
-        const searchSubmit= $('#search-submit');
-        const searchInput = $('#search-input')
+        const searchInput = $('#search-input');
+        const searchDateInput = $('#search-date-input')
 
-        searchBar.on('click', searchSubmit, function (e) {
-            console.log(searchInput.val());
+        searchBar.on('click', '#search-submit', function (e) {
+            const searchBy = searchInput.val().trim();
+            $('.task-singular-container').each(function(index) {
+                const title = $(this).children('.task-title').html();
+                const description = $(this).attr('data-task-description');
+                // Check title and description
+                if (searchBy && (title.includes(searchBy) || description.includes(searchBy))) {
+                    $(this).css('background-color', 'yellow');
+                }
+                else
+                    $(this).css('background-color', 'white');
+            });
+        });
+        searchBar.on('click', '#search-date-submit', function (e) {
+            const searchBy = new Date(searchDateInput.val() + " PST").toDateString()
+            $('.task-singular-container').each(function(index) {
+                if (searchBy === $(this).children('.task-date').html())
+                {
+                    $(this).css('background-color', 'yellow');
+                }
+                else
+                    $(this).css('background-color', 'white');
+            });
         });
         taskPage.on('click', '.btn-delete', function (e) {
             const id = $(this).parent().attr('data-task-id');

@@ -91,6 +91,14 @@ textarea {
   position: fixed;
 }
 
+.search-bar > h3 {
+  margin-left: 40px;
+}
+
+#search-date-header {
+  margin-top: 40px;
+}
+
 .task-container-all, .task-container-day {
   clear: right;
   width: 700px;
@@ -104,7 +112,7 @@ textarea {
   background-color: rgb(193, 236, 253);
 }
 
-.task-singular-container {
+.task-singular-container, .add-singular-container {
   height: 40px;
   padding-left: 6px;
   width: 694px;
@@ -202,14 +210,14 @@ textarea {
   color: inherit;
 }
 
-#search-input {
+#search-input, #search-date-input {
   height: 20px;
-  margin-top: 15px;
+  width: 160px;
   margin-left: 40px;
   margin-right: 0px;
 }
 
-#search-submit {
+#search-submit, #search-date-submit {
   height: 26px;
   margin-left: 0px;
   background-color: rgb(83, 203, 250);
@@ -218,11 +226,11 @@ textarea {
   outline: none;
 }
 
-#search-submit:active {
+#search-submit:active, #search-date-submit:active {
   background-color: rgb(19, 178, 241);
 }
 
-#search-submit:hover, .btn-delete:hover, 
+#search-submit:hover, .btn-delete:hover, #search-date-submit:hover 
 .btn-task-switcher:hover, .btn-edit:hover {
   cursor: pointer;
 }
