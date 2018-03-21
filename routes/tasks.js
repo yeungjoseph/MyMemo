@@ -43,6 +43,40 @@ router.get('/search' , function(req, res) {
     })
 });
 
+// Search tasks by date
+router.get('/searchdate' , function(req, res) {
+    let searchBy = req.query.search.trim();
+    if (searchBy) {
+        const select = 'SELECT * FROM "Tasks" WHERE "finishBy" = ?';
+        return db.sequelize
+        .query(select, {
+            replacements: [ searchBy ],
+            model: Tasks
+        })
+        .then(tasks => {
+            res.send(tasks[0]);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(501).send(error);
+        })
+    }
+    else {
+        const select = 'SELECT * FROM "Tasks" WHERE "finishBy" IS NULL';
+        return db.sequelize
+        .query(select, {
+            model: Tasks
+        })
+        .then(tasks => {
+            res.send(tasks[0]);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(501).send(error);
+        })
+    }
+});
+
 // Create a new task
 router.post('/', function(req, res) {
     const title = req.body.title.trim();

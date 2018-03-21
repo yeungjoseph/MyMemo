@@ -46,15 +46,35 @@ searchBar.on('click', '#search-submit', function (e) {
 
 });
 searchBar.on('click', '#search-date-submit', function (e) {
-    const searchBy = new Date(searchDateInput.val() + " PST").toDateString()
-    $('.task-singular-container').each(function(index) {
-        if (searchBy === $(this).children('.task-date').html())
-        {
-            $(this).css('background-color', 'yellow');
-        }
-        else
-            $(this).css('background-color', 'white');
+    let searchBy = searchDateInput.val();
+    if (searchBy)
+        searchBy = new Date(searchBy).toISOString().substr(0,10);
+    const params = { search: searchBy };
+    $.ajax({
+        method: 'GET',
+        url: `/tasks/searchdate/?${ jQuery.param(params) }`
+    })
+    .done(function(tasks) {
+        allTaskContainer.empty();
+        dayTaskContainer.empty();
+
+        tasks.forEach(function (task) {
+            if (task.finishBy) {
+                task.finishBy = new Date(task.finishBy + " PST").toDateString();
+            }
+            else {
+                task.finishBy = "N/A";
+            }
+            let allOrDay = 'all';
+            if (task.inProg === true) 
+                allOrDay = 'day';
+            addTask(task.title, task.finishBy, task.description, task.id, allOrDay);
+        });
+    })
+    .fail(function(err) {
+        console.log(err);
     });
+    
 });
 taskPage.on('click', '.btn-delete', function (e) {
     const id = $(this).parent().attr('data-task-id');
@@ -85,8 +105,8 @@ taskPage.on('click', '.btn-task-switcher', function (e) {
     })
     .done(function(response) {
         const description = button.parent().attr('data-task-description');
-        const finishBy    = button.siblings('.task-date').html();
-        const title       = button.siblings('.task-title').html();
+        const finishBy    = button.siblings('.task-date').text();
+        const title       = button.siblings('.task-title').text();
         button.parent().remove();
         // add task to other container
         let allOrDay = 'day'
@@ -102,9 +122,9 @@ taskPage.on('click', '.btn-task-switcher', function (e) {
 taskPage.on('click', '.btn-edit', function(e) {
     const button     = $(this);
     const id         = button.parent().attr('data-task-id');
-    const title      = button.siblings('.task-title').html();
+    const title      = button.siblings('.task-title').text();
     const description= button.parent().attr('data-task-description');
-    const finishBy   = button.siblings('.task-date').html();
+    const finishBy   = button.siblings('.task-date').text();
     editTaskForm.attr('form-task-id', id)
 
     $('#edit-task-title').val(title);
