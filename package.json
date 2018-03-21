@@ -3,16 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test-back": "mocha --timeout 10000"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "client-sessions": "^0.8.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "~4.15.5",
+    "mocha": "^5.0.4",
     "morgan": "~1.9.0",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",

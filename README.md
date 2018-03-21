@@ -10,7 +10,7 @@
 3. Download and install Postgres at https://www.postgresql.org/ (For Windows)
 4. Open up a new terminal and run:
    ```
-   psql
+   psql -U postgres
    ```
    (The terminal may prompt you for the password for the superuser)
 5. Create a development and testing database by running:
@@ -36,7 +36,8 @@
    node_modules/.bin/sequelize db:migrate
    ```
    ```
-   NODE_ENV=test node_modules/.bin/sequelize db:migrate
+   SET NODE_ENV=test
+   node_modules/.bin/sequelize db:migrate
    ```
 9. Start the server by running:
    ```
@@ -58,19 +59,19 @@
 
 ## Features
 Home Page:
--Directs users to authentication page
--Directs users to task list page
+- Directs users to authentication page
+- Directs users to task list page
 
 Authentication Page:
--Allow new users to create an account with unique email and password
--Authenticate existing users and redirect them to task list page
+- Allow new users to create an account with unique email and password
+- Authenticate existing users and redirect them to task list page
 
 Task List Page:
--Display a complete list of all tasks that the user has added
--Separate tasks into two tables depending on whether or not the task is in progress
--Allow users to move tasks in between the two lists
--Allow users to add, delete, and edit tasks on both lists
--Allow users to search for tasks by title, description, and due date
+- Display a complete list of all tasks that the user has added
+- Separate tasks into two tables depending on whether or not the task is in progress
+- Allow users to move tasks in between the two lists
+- Allow users to add, delete, and edit tasks on both lists
+- Allow users to search for tasks by title, description, and due date
 
 Tasks:
 -Consists of a title (required), description (optional), and due date (optional)
