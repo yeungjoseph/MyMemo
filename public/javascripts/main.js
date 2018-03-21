@@ -42,6 +42,7 @@ searchBar.on('click', '#search-submit', function (e) {
     })
     .fail(function(err) {
         console.log(err);
+        alert("Unable to complete search. Please try again later.");
     });
 
 });
@@ -73,6 +74,7 @@ searchBar.on('click', '#search-date-submit', function (e) {
     })
     .fail(function(err) {
         console.log(err);
+        alert("Unable to complete search. Please try again later.");
     });
     
 });
@@ -89,6 +91,7 @@ taskPage.on('click', '.btn-delete', function (e) {
     })
     .fail(function(err) {
         console.log(err);
+        alert("Unable to delete task. Please try again later.");
     });
 });
 taskPage.on('click', '.btn-task-switcher', function (e) {
@@ -117,6 +120,7 @@ taskPage.on('click', '.btn-task-switcher', function (e) {
     })
     .fail(function(err) {
         console.log(err);
+        alert("Unable to move task. Please try again later.");
     });
 });
 taskPage.on('click', '.btn-edit', function(e) {
@@ -185,6 +189,7 @@ addTaskForm.submit(function(e) {
     })
     .fail(function(err) {
         console.log(err);
+        alert("Unable to add task. Please try again later.");
     });
 });
 editTaskForm.submit(function(e) {
@@ -217,6 +222,7 @@ editTaskForm.submit(function(e) {
     })
     .fail(function(err) {
         console.log(err);
+        alert("Unable to edit task. Please try again later.");
     });
 });
 
