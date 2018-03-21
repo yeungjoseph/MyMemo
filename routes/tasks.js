@@ -14,15 +14,33 @@ router.get('/', function(req, res) {
     return db.sequelize
     .query(select, { 
         replacements: [userId], 
-        model: Tasks,
+        model: Tasks
     })
     .then((tasks) => {
         res.render('tasks', { 'tasklist': tasks[0] });
     })
     .catch((error) => {
         console.log(error);
-        res.status(400).send(error);
+        res.status(501).send(error);
     });
+});
+
+// Search tasks
+router.get('/search' , function(req, res) {
+    const searchBy = req.query.search.trim();
+    const select = 'SELECT * FROM "Tasks" WHERE title LIKE :search OR description LIKE :search';
+    return db.sequelize
+    .query(select, {
+        replacements: { search: '%' + searchBy + '%' },
+        model: Tasks
+    })
+    .then(tasks => {
+        res.send(tasks[0]);
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(501).send(error);
+    })
 });
 
 // Create a new task
