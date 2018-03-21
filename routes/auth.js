@@ -39,7 +39,7 @@ router.post('/login',  function(req, res) {
     })
     .catch((error) => {
         console.log(error);
-        res.status(501).send(error);
+        res.status(500).send(error);
     });
 });
 
@@ -74,12 +74,12 @@ router.post('/user',function(req, res) {
           })
           .catch((error) => {
             console.log(error);
-            return res.status(501).send(error);
+            return res.status(500).send(error);
           });
     })
     .catch(error => {
       console.log(error);
-      res.status(501).send(error)
+      res.status(500).send(error)
     });
 });
 

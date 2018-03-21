@@ -21,17 +21,18 @@ router.get('/', function(req, res) {
     })
     .catch((error) => {
         console.log(error);
-        res.status(501).send(error);
+        res.status(500).send(error);
     });
 });
 
 // Search tasks
 router.get('/search' , function(req, res) {
+    const userId = req.user.id;
     const searchBy = req.query.search.trim();
-    const select = 'SELECT * FROM "Tasks" WHERE title LIKE :search OR description LIKE :search';
+    const select = 'SELECT * FROM "Tasks" WHERE (title LIKE :search OR description LIKE :search) AND "userId" = :userId';
     return db.sequelize
     .query(select, {
-        replacements: { search: '%' + searchBy + '%' },
+        replacements: { search: '%' + searchBy + '%', userId: userId },
         model: Tasks
     })
     .then(tasks => {
@@ -39,18 +40,19 @@ router.get('/search' , function(req, res) {
     })
     .catch(error => {
         console.log(error);
-        res.status(501).send(error);
+        res.status(500).send(error);
     })
 });
 
 // Search tasks by date
 router.get('/searchdate' , function(req, res) {
+    const userId = req.user.id;
     let searchBy = req.query.search.trim();
     if (searchBy) {
-        const select = 'SELECT * FROM "Tasks" WHERE "finishBy" = ?';
+        const select = 'SELECT * FROM "Tasks" WHERE "finishBy" = ? AND "userId" = ?';
         return db.sequelize
         .query(select, {
-            replacements: [ searchBy ],
+            replacements: [ searchBy, userId ],
             model: Tasks
         })
         .then(tasks => {
@@ -58,13 +60,14 @@ router.get('/searchdate' , function(req, res) {
         })
         .catch(error => {
             console.log(error);
-            res.status(501).send(error);
+            res.status(500).send(error);
         })
     }
     else {
-        const select = 'SELECT * FROM "Tasks" WHERE "finishBy" IS NULL';
+        const select = 'SELECT * FROM "Tasks" WHERE "finishBy" IS NULL AND "userId" = ?';
         return db.sequelize
         .query(select, {
+            replacements: [ userId ],
             model: Tasks
         })
         .then(tasks => {
@@ -72,7 +75,7 @@ router.get('/searchdate' , function(req, res) {
         })
         .catch(error => {
             console.log(error);
-            res.status(501).send(error);
+            res.status(500).send(error);
         })
     }
 });
@@ -110,12 +113,12 @@ router.post('/', function(req, res) {
             })
             .catch((error) => {
                 console.log(error);
-                return res.status(501).send(error);
+                return res.status(500).send(error);
             });
         })
         .catch(error => {
             console.log(error);
-            res.status(501).send(error);
+            res.status(500).send(error);
         });
 });
 
@@ -130,7 +133,7 @@ router.delete('/:id', function(req, res) {
         .then((response) => res.send("Successful delete"))
         .catch((error) => {
             console.log(error);
-            res.status(501).send(error);
+            res.status(500).send(error);
         });
 });
 
@@ -146,7 +149,7 @@ router.patch('/:id/inProg', function(req, res) {
         .then((response) => res.send('Updated inProg status'))
         .catch((error) => {
             console.log(error);
-            res.status(501).send(error);
+            res.status(500).send(error);
         });
 });
 
@@ -170,7 +173,7 @@ router.patch('/:id', function(req ,res) {
         .then((response) => res.send('Updated task'))
         .catch((error) => {
             console.log(error);
-            res.status(501).send(error);
+            res.status(500).send(error);
         });
 });
 
