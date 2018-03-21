@@ -50,11 +50,11 @@
 10. In your web browser, navigate to http:/localhost:3000 to see the home page
 11. To begin backend Mocha testing, run:
    ```
-   npm test-back
+   npm run test-back
    ```
 12. To begin frontend TestCafe testing, run:
    ```
-   npm test-front
+   npm run test-front
    ```
 
 ## Features

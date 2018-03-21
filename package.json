@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test-back": "mocha --timeout 10000"
+    "test-back": "mocha --exit --timeout 10000"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
