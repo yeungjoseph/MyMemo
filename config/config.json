@@ -1,15 +1,15 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "1234",
+    "username": "tempuser",
+    "password": "temppass",
     "database": "mymemo_dev",
     "host": "127.0.0.1",
     "port": 5432,
     "dialect": "postgres"
   },
   "test": {
-    "username": "postgres",
-    "password": "1234",
+    "username": "tempuser",
+    "password": "temppass",
     "database": "mymemo_test",
     "host": "127.0.0.1",
     "port": 5432,
