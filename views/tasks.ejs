@@ -14,6 +14,34 @@
         <input id="search-date-input" type="date" name="search-date-input"/>
         <input id="search-date-submit" type="submit" value="Search" />
     </div>
+    <!-- Daily task list-->
+    <div class="task-container-day">
+        <div class="task-header-day">
+            <h1 class="center">Tasks For the Day</h1>
+            <p class="task-title-header">Task</p>
+            <p class="task-date-header">Finish By</p>
+        </div>
+        <div class="task-content-day">
+            <% for (var i = 0; i < tasklist.length; i++) { %>
+                <% if (tasklist[i].inProg) { %>
+                    <div class="task-singular-container" data-task-inProg="true" data-task-id="<%= tasklist[i].id %>" data-task-description="<%= tasklist[i].description %>">
+                        <button class="btn-delete"><i class="fas fa-minus-circle"></i></button>
+                        <button class="btn-edit"><i class="fas fa-pencil-alt"></i></button>
+                        <p class="task-title"><%= tasklist[i].title %></p>
+                        <% if (tasklist[i].finishBy) { %>
+                        <p class="task-date"><%= new Date(tasklist[i].finishBy + " PST").toDateString() %></p>
+                        <% } else { %>
+                        <p class="task-date">N/A</p>
+                        <% } %>
+                        <i class="fas fa-arrows-alt-v btn-task-switcher"></i>
+                    </div>
+                <% } %>
+            <% } %>
+            </div>
+            <div class="add-singular-container">
+            <a href=# class="add-task-day">Add a task</a>
+        </div>
+    </div>
     <!-- All tasks list -->
     <div class="task-container-all">
         <div class="task-header-all">
@@ -40,34 +68,6 @@
         </div>
         <div class="add-singular-container">
             <a href=# class="add-task-all">Add a task</a>
-        </div>
-    </div>
-    <!-- Daily task list-->
-    <div class="task-container-day">
-        <div class="task-header-day">
-            <h1 class="center">Tasks For the Day</h1>
-            <p class="task-title-header">Task</p>
-            <p class="task-date-header">Finish By</p>
-        </div>
-        <div class="task-content-day">
-            <% for (var i = 0; i < tasklist.length; i++) { %>
-                <% if (tasklist[i].inProg) { %>
-                    <div class="task-singular-container" data-task-inProg="true" data-task-id="<%= tasklist[i].id %>" data-task-description="<%= tasklist[i].description %>">
-                        <button class="btn-delete"><i class="fas fa-minus-circle"></i></button>
-                        <button class="btn-edit"><i class="fas fa-pencil-alt"></i></button>
-                        <p class="task-title"><%= tasklist[i].title %></p>
-                        <% if (tasklist[i].finishBy) { %>
-                        <p class="task-date"><%= new Date(tasklist[i].finishBy + " PST").toDateString() %></p>
-                        <% } else { %>
-                        <p class="task-date">N/A</p>
-                        <% } %>
-                        <i class="fas fa-arrows-alt-v btn-task-switcher"></i>
-                    </div>
-                <% } %>
-            <% } %>
-         </div>
-         <div class="add-singular-container">
-            <a href=# class="add-task-day">Add a task</a>
         </div>
     </div>
 

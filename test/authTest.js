@@ -12,14 +12,22 @@ const db = require('../models/index');
 describe('Auth', () => {
     // Clear the database and repopulate with a dummy user
     beforeEach(done => {
-        db.User.destroy({ where: {} })
+        db.sequelize
+        .query('DELETE FROM "Users"', {
+            type: db.sequelize.QueryTypes.DELETE
+        })
         .then(() => {
             const testUser = {
                 email: 'test@test.com',
-                password: 'test'
+                password: db.User.hashPassword('test')
             };
 
-            db.User.create(testUser)
+            const insert = 'INSERT INTO "Users" (email, password) VALUES (?, ?)';
+            db.sequelize
+            .query(insert, {
+                replacements: [testUser.email, testUser.password], 
+                type: db.sequelize.QueryTypes.INSERT,
+            })
             .then(user => done())
             .catch(err => console.log(err));
         })
@@ -39,20 +47,98 @@ describe('Auth', () => {
     });
 
     describe('/logout GET', () => {
-        it('should redirect to auth page if no user is logged in');
-        it('should reset user session and redirect to auth page if a user is logged in');
+        it('should redirect to auth page upon logout', done => {
+            chai.request(server)
+            .get('/logout')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.html;
+                res.should.redirectTo(res.request.protocol + '//' + 
+                    res.request.host + '/auth');
+                done();
+            });
+        });
     });
 
     describe('/login POST', () => {
-        it('should send error upon failed login due to nonexistent email');
-        it('should send error upon failed login due to incorrect password');
-        it('should send error upon failed login due to password with only spaces');
-        it('should redirect user to task page upon successful login');
+        it('should send error upon failed login due to nonexistent email', done => {
+            chai.request(server)
+            .post('/login')
+            .send({ email: 'doesntexist@gmail.com', password: 'whateverpass' })
+            .end(function(err, res) {
+                res.should.have.status(401);
+                res.should.be.html;
+                done();
+            });
+        });
+        it('should send error upon failed login due to incorrect password', done => {
+            chai.request(server)
+            .post('/login')
+            .send({ email: 'test@test.com', password: 'whateverpass' })
+            .end(function(err, res) {
+                res.should.have.status(401);
+                res.should.be.html;
+                done();
+            });
+        });
+        it('should send error upon failed login due to password with only spaces', done => {
+            chai.request(server)
+            .post('/login')
+            .send({ email: 'test@test.com', password: '      ' })
+            .end(function(err, res) {
+                res.should.have.status(401);
+                res.should.be.html;
+                done();
+            });
+        });
+        it('should redirect user to task page upon successful login', done => {
+            chai.request(server)
+            .post('/login')
+            .send({ email: 'test@test.com', password: 'test' })
+            .end(function(err, res) {
+                res.should.have.status(200);
+                res.should.be.html;
+                res.should.redirectTo(res.request.protocol + '//' + 
+                    res.request.host + '/tasks');
+                done();
+            });
+        });
     });
 
     describe('/user POST', () => {
-        it('should create user and redirect to task page upon successful registration');
-        it('should send error upon attempting to register with an already taken email');
-        it('should send error upon attempting to register with a password containing only spaces');
+        it('should create user and redirect to task page upon successful registration', done => {
+            chai.request(server)
+            .post('/user')
+            .send({ email: 'new@new.com', password: 'new' })
+            .end(function(err, res) {
+                res.should.have.status(200);
+                res.should.be.html;
+                res.should.redirectTo(res.request.protocol + '//' + 
+                    res.request.host + '/tasks');
+                done();
+            });
+        });
+        it('should send error upon attempting to register with an already taken email', done => {
+            chai.request(server)
+            .post('/user')
+            .send({ email: 'test@test.com', password: 'whatever' })
+            .end(function(err, res) {
+                res.should.have.status(500);
+                res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.a.property('name').eql('SequelizeUniqueConstraintError');
+                done();
+            });
+        });
+        it('should send error upon attempting to register with a password containing only spaces', done => {
+            chai.request(server)
+            .post('/user')
+            .send({ email: 'new@new.com', password: '     ' })
+            .end(function(err, res) {
+                res.should.have.status(401);
+                res.should.be.html;
+                done();
+            });
+        });
     });
 });

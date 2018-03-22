@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test-back": "mocha --exit --timeout 10000"
+    "test-back": "cross-env NODE_ENV=test mocha --exit"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
@@ -13,6 +13,7 @@
     "chai-http": "^3.0.0",
     "client-sessions": "^0.8.0",
     "cookie-parser": "~1.4.3",
+    "cross-env": "^5.1.4",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "~4.15.5",
