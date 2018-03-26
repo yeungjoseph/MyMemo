@@ -26,7 +26,7 @@ router.get('/', function(req, res) {
 });
 
 // Search tasks
-router.get('/search' , function(req, res) {
+router.get('/search', function(req, res) {
     const userId = req.user.id;
     const searchBy = req.query.search.trim();
     const select = 'SELECT * FROM "Tasks" WHERE (title LIKE :search OR description LIKE :search) AND "userId" = :userId';
@@ -45,7 +45,7 @@ router.get('/search' , function(req, res) {
 });
 
 // Search tasks by date
-router.get('/searchdate' , function(req, res) {
+router.get('/searchdate', function(req, res) {
     const userId = req.user.id;
     let searchBy = req.query.search.trim();
     if (searchBy) {
@@ -94,6 +94,7 @@ router.post('/', function(req, res) {
         finishBy = null;
 
     const insert = 'INSERT INTO "Tasks" (title, description, "finishBy", "userId", "inProg") VALUES (?, ?, ?, ?, ?) RETURNING id'
+    console.log(insert);
     return db.sequelize
         .query(insert, {
             replacements: [title, description, finishBy, userId, inProg],
@@ -106,7 +107,7 @@ router.post('/', function(req, res) {
             return db.sequelize
             .query(select, {
                 replacements: [new_id],
-                model: Tasks,
+                model: Tasks
             })
             .then((response) => {
                 return res.send(response[0][0]);
@@ -128,9 +129,14 @@ router.delete('/:id', function(req, res) {
     return db.sequelize
         .query(del, {
             replacements: [req.params.id.trim()],
-            type: db.sequelize.QueryTypes.DELETE,
+            //type: db.sequelize.QueryTypes.DELETE,
         })
-        .then((response) => res.send("Successful delete"))
+        .then(response => {
+            if (response[1].rowCount > 0)
+                res.json({ success: true });
+            else  
+                res.status(404).json({ success: false });
+        })
         .catch((error) => {
             console.log(error);
             res.status(500).send(error);
@@ -146,7 +152,12 @@ router.patch('/:id/inProg', function(req, res) {
             replacements: [inProg, req.params.id.trim()],
             type: db.sequelize.QueryTypes.PATCH
         })
-        .then((response) => res.send('Updated inProg status'))
+        .then(response => {
+            if (response[1].rowCount > 0)
+                res.json({ success: true });
+            else  
+                res.status(404).json({ success: false });
+        })
         .catch((error) => {
             console.log(error);
             res.status(500).send(error);
@@ -170,7 +181,12 @@ router.patch('/:id', function(req ,res) {
             replacements: [title, description, finishBy, taskId],
             type: db.sequelize.QueryTypes.PATCH
         })
-        .then((response) => res.send('Updated task'))
+        .then(response => {
+            if (response[1].rowCount > 0)
+                res.json({ success: true });
+            else  
+                res.status(404).json({ success: false });
+        })
         .catch((error) => {
             console.log(error);
             res.status(500).send(error);

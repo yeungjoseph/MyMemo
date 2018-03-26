@@ -10,7 +10,7 @@ const db = require('../models/index');
 */
 
 describe('Auth', () => {
-    // Clear the database and repopulate with a dummy user
+    // Clear the database and repopulate with a test user
     beforeEach(done => {
         db.sequelize
         .query('DELETE FROM "Users"', {

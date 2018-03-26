@@ -26,10 +26,7 @@
    ```
 7. Give the new user permissions on both databases by running:
    ```
-   GRANT ALL PRIVILEGES ON DATABASE "mymemo_dev" to tempuser;
-   ```
-   ```
-   GRANT ALL PRIVILEGES ON DATABASE "mymemo_test" to tempuser;
+   ALTER USER tempuser WITH SUPERUSER;
    ```
 8. Back in the projects directory, run the migrations: 
    ```
