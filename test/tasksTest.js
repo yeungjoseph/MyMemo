@@ -77,6 +77,23 @@ describe('Tasks', () => {
         .catch(err => console.log(err));
     });
 
+    afterEach(done => {
+        db.sequelize
+        .query('DELETE FROM "Users"', {
+            type: db.sequelize.QueryTypes.DELETE
+        })
+        .then(() => {
+            // Clear "Tasks" database and id counter
+            db.sequelize
+            .query('TRUNCATE TABLE "Tasks" RESTART IDENTITY', {
+                type: db.sequelize.QueryTypes.DELETE
+            })
+            .then(() => done())
+            .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+    });
+
     describe('/tasks GET', () => {
         it('should render a task list page with all the users tasks', done => {
             agent

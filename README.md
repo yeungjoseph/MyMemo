@@ -7,6 +7,11 @@
    ```
    npm install
    ```
+   Note: Testcafe and sequelize must be installed globally to run on the command line: 
+   ```
+   npm install testcafe -g 
+   npm install sequelize-cli -g
+   ```
 3. Download and install Postgres at https://www.postgresql.org/ (For Windows)
 4. Open up a new terminal and run:
    ```
@@ -30,11 +35,10 @@
    ```
 8. Back in the projects directory, run the migrations: 
    ```
-   node_modules/.bin/sequelize db:migrate
+   sequelize db:migrate
    ```
    ```
-   SET NODE_ENV=test
-   node_modules/.bin/sequelize db:migrate
+   npm run test-migrations
    ```
 9. Start the server by running:
    ```
@@ -49,7 +53,14 @@
    ```
    npm run test-back
    ```
-12. To begin frontend TestCafe testing, run:
+12. To begin frontend TestCafe testing, run the following three commands:
+   ```
+   npm run test-seeders
+   ```
+   ```
+   npm run test-front-server
+   ```
+   And open up a new terminal, go to the project directory and run:
    ```
    npm run test-front
    ```
