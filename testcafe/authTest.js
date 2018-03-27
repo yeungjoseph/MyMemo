@@ -15,13 +15,35 @@ test('Successful login redirects user to tasks page', async (t) => {
 });
 
 test('Unsuccessful login creates an alert', async (t) => {
+    const getPageUrl = ClientFunction(() => window.location.href.toString());
+
     await t
+        .setNativeDialogHandler(() => true)
         .typeText('#login-email', 'test@test.com')
         .typeText('#login-password', 'wrongpw')
         .click('#sign-in')
+        .expect(getPageUrl()).contains('/auth');
     
+    const dialogHistory = await t.getNativeDialogHistory();
+
+    await t
+        .expect(dialogHistory[0].type).eql('alert')
+        .expect(dialogHistory[0].text).eql('Incorrect login credentials.')
 });
 
-// Successful registration redirects user to tasks page
+test('Unsuccessful registration creates an alert', async(t) => {
+    const getPageUrl = ClientFunction(() => window.location.href.toString());
 
-// Unsuccessful registration creates an alert
+    await t
+        .setNativeDialogHandler(() => true)
+        .typeText('#register-email', 'test@test.com')
+        .typeText('#register-password', 'test')
+        .click('#sign-up')
+        .expect(getPageUrl()).contains('/auth');
+    
+    const dialogHistory = await t.getNativeDialogHistory();
+
+    await t
+        .expect(dialogHistory[0].type).eql('alert')
+        .expect(dialogHistory[0].text).eql('Email has already been taken.')
+});
