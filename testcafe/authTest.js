@@ -1,4 +1,4 @@
-import { Role, ClientFunction } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 
 fixture('Authentication page')
     .page('http://localhost:3000/auth');
