@@ -11,6 +11,7 @@
    ```
    npm install testcafe -g 
    npm install sequelize-cli -g
+   npm install nodemon -g
    ```
 3. Download and install Postgres at https://www.postgresql.org/ (For Windows)
 4. Open up a new terminal and run:
@@ -41,10 +42,6 @@
    npm run test-migrations
    ```
 9. Start the server by running:
-   ```
-   npm start
-   ```
-   OR
    ```
    nodemon
    ```

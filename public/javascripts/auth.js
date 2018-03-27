@@ -9,7 +9,8 @@ $('#login-form').submit(function (e) {
         }
     })
     .done(function(response) {
-        window.location.replace("http://127.0.0.1:3000/tasks");
+        console.log('in done');
+        window.location.href = '/tasks';
     })
     .fail(function(err) {
         console.log(err);
@@ -28,7 +29,7 @@ $('#register-form').submit(function (e) {
         }
     })
     .done(function(response) {
-        window.location.replace("http://127.0.0.1:3000/tasks");
+        window.location.replace("/tasks");
     })
     .fail(function(err) {
         console.log(err);

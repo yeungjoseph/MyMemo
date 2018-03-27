@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "test-migrations": "cross-env NODE_ENV=test sequelize db:migrate",
     "test-seeders": "cross-env NODE_ENV=test sequelize db:seed:all",
-    "test-front-server": "cross-env NODE_ENV=test npm start",
+    "test-front-server": "cross-env NODE_ENV=test nodemon",
     "test-front": "testcafe chrome testcafe/",
     "test-back": "cross-env NODE_ENV=test mocha --exit"
   },
@@ -29,5 +29,8 @@
     "sequelize-cli": "^4.0.0",
     "serve-favicon": "~2.4.5",
     "testcafe": "^0.19.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2"
   }
 }

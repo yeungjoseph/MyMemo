@@ -1,7 +1,7 @@
 import { Role, ClientFunction } from 'testcafe';
 
 fixture('Authentication page')
-    .page('127.0.0.1:3000/auth');
+    .page('http://localhost:3000/auth');
 
 test('Successful login redirects user to tasks page', async (t) => {
     const getPageUrl = ClientFunction(() => window.location.href.toString());
@@ -10,10 +10,17 @@ test('Successful login redirects user to tasks page', async (t) => {
         .typeText('#login-email', 'test@test.com')
         .typeText('#login-password', 'test')
         .click('#sign-in') // Redirect is still hanging here
-        await t.expect(getPageUrl()).contains('/tasks');
+    const url = await getPageUrl()
+    await t.expect(url).contains('/tasks');
 });
 
-// Unsuccessful login creates an alert
+test('Unsuccessful login creates an alert', async (t) => {
+    await t
+        .typeText('#login-email', 'test@test.com')
+        .typeText('#login-password', 'wrongpw')
+        .click('#sign-in')
+    
+});
 
 // Successful registration redirects user to tasks page
 
