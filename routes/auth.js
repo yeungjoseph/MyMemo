@@ -33,7 +33,7 @@ router.post('/login',  function(req, res) {
         {
             req.session.user = response[0];
             // return res.redirect('/tasks'); 
-            res.end();
+            res.status(200).end();
         }
         else 
           return res.status(401).send('Invalid email or password');

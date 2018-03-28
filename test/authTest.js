@@ -91,15 +91,12 @@ describe('Auth', () => {
                 done();
             });
         });
-        it('should redirect user to task page upon successful login', done => {
+        it('should receive a status code of 200 upon successful login', done => {
             chai.request(server)
             .post('/login')
             .send({ email: 'test@test.com', password: 'test' })
             .end(function(err, res) {
                 res.should.have.status(200);
-                res.should.be.html;
-                res.should.redirectTo(res.request.protocol + '//' + 
-                    res.request.host + '/tasks');
                 done();
             });
         });

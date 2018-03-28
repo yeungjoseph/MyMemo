@@ -105,6 +105,27 @@ test('Task can be moved to a different table after being created', async (t) => 
         .expect(task.getAttribute('data-task-description')).eql('Editted description');
 });
 
+test('Task can be moved to back to original table after being created', async (t) => {
+    await t
+        .useRole(testUser)
+        .navigateTo('/tasks')
+        .click('.btn-task-switcher');
+
+    const dayTasks = await Selector('.task-content-day').child('.task-singular-container');
+    const allTaskCount = await Selector('.task-content-all').child('.task-singular-container').count;
+    const dayTaskCount = await dayTasks.count;
+    const task = await dayTasks.nth(0);
+
+    await t
+        .expect(dayTaskCount).eql(1)
+        .expect(allTaskCount).eql(0)
+        .expect(task.hasAttribute('data-task-inprog')).ok()
+        .expect(task.hasAttribute('data-task-id')).ok()
+        .expect(task.hasAttribute('data-task-description')).ok()
+        .expect(task.getAttribute('data-task-inprog')).eql('true')
+        .expect(task.getAttribute('data-task-description')).eql('Editted description');
+});
+
 test('Only display tasks that match the search criteria', async (t) => {
     await t
         .useRole(testUser)
@@ -112,18 +133,18 @@ test('Only display tasks that match the search criteria', async (t) => {
         .typeText('#search-input', 'Editted')
         .click('#search-submit')
 
-    const dayTaskCount = await Selector('.task-content-day').child('.task-singular-container').count;
-    const allTasks = await Selector('.task-content-all').child('.task-singular-container');
-    const allTaskCount = await allTasks.count;
-    const task = await allTasks.nth(0);
+    const dayTasks = await Selector('.task-content-day').child('.task-singular-container');
+    const allTaskCount = await Selector('.task-content-all').child('.task-singular-container').count;
+    const dayTaskCount = await dayTasks.count;
+    const task = await dayTasks.nth(0);
 
     await t
-        .expect(dayTaskCount).eql(0)
-        .expect(allTaskCount).eql(1)
+        .expect(dayTaskCount).eql(1)
+        .expect(allTaskCount).eql(0)
         .expect(task.hasAttribute('data-task-inprog')).ok()
         .expect(task.hasAttribute('data-task-id')).ok()
         .expect(task.hasAttribute('data-task-description')).ok()
-        .expect(task.getAttribute('data-task-inprog')).eql('false')
+        .expect(task.getAttribute('data-task-inprog')).eql('true')
         .expect(task.getAttribute('data-task-description')).eql('Editted description');
 });
 
@@ -134,18 +155,18 @@ test('Only display tasks that match the date search criteria', async (t) => {
         .typeText('#search-date-input', '2018-04-15')
         .click('#search-date-submit')
 
-    const dayTaskCount = await Selector('.task-content-day').child('.task-singular-container').count;
-    const allTasks = await Selector('.task-content-all').child('.task-singular-container');
-    const allTaskCount = await allTasks.count;
-    const task = await allTasks.nth(0);
+    const dayTasks = await Selector('.task-content-day').child('.task-singular-container');
+    const allTaskCount = await Selector('.task-content-all').child('.task-singular-container').count;
+    const dayTaskCount = await dayTasks.count;
+    const task = await dayTasks.nth(0);
 
     await t
-        .expect(dayTaskCount).eql(0)
-        .expect(allTaskCount).eql(1)
+        .expect(dayTaskCount).eql(1)
+        .expect(allTaskCount).eql(0)
         .expect(task.hasAttribute('data-task-inprog')).ok()
         .expect(task.hasAttribute('data-task-id')).ok()
         .expect(task.hasAttribute('data-task-description')).ok()
-        .expect(task.getAttribute('data-task-inprog')).eql('false')
+        .expect(task.getAttribute('data-task-inprog')).eql('true')
         .expect(task.getAttribute('data-task-description')).eql('Editted description');
 });
 
